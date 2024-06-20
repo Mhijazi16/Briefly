@@ -1,6 +1,17 @@
 import streamlit as st 
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+import ollama
+
+def embed_chunks(chunks): 
+    vectors = []
+    for i, chunk in enumerate(chunks, start=1): 
+        vector = ollama.embeddings(
+            model="nomic-embed-text",
+            prompt=chunk
+        )
+        vectors.append(vector)
+    return vectors
 
 def split_text(raw_text):
     splitter = RecursiveCharacterTextSplitter(
@@ -29,8 +40,9 @@ def main():
         documents = st.file_uploader("upload your files here", accept_multiple_files=True)
         if st.button(":package: Process") : 
             raw_text  = read_docs(documents)
-            chunks= split_text(raw_text)
-            st.write(chunks)
+            chunks = split_text(raw_text)
+            vectors = embed_chunks(chunks)
+            st.write(vectors)
 
 
 if __name__ == "__main__": 
