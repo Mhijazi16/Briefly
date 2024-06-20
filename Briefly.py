@@ -1,5 +1,15 @@
 import streamlit as st 
 from PyPDF2 import PdfReader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+def split_text(raw_text):
+    splitter = RecursiveCharacterTextSplitter(
+        separators=["\n\n", "\n", ".", " "],
+        chunk_size=500,
+        chunk_overlap=200,
+        length_function=len
+    )
+    return splitter.split_text(raw_text)
 
 def read_docs(documents): 
     text = ""
@@ -19,6 +29,8 @@ def main():
         documents = st.file_uploader("upload your files here", accept_multiple_files=True)
         if st.button(":package: Process") : 
             raw_text  = read_docs(documents)
+            chunks= split_text(raw_text)
+            st.write(chunks)
 
 
 if __name__ == "__main__": 
