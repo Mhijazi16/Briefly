@@ -2,6 +2,10 @@ import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import ollama
+from langchain.vectorstores import FAISS
+
+def create_vectorstore(chunks,embeddings): 
+    return FAISS.from_texts(texts=chunks,embedding=embeddings)
 
 def embed_chunks(chunks): 
     vectors = []
@@ -39,10 +43,11 @@ def main():
         st.subheader("Upload Your Documents")
         documents = st.file_uploader("upload your files here", accept_multiple_files=True)
         if st.button(":package: Process") : 
-            raw_text  = read_docs(documents)
-            chunks = split_text(raw_text)
-            vectors = embed_chunks(chunks)
-            st.write(vectors)
+            with st.spinner("Processing") : 
+                raw_text  = read_docs(documents)
+                chunks = split_text(raw_text)
+                vectors = embed_chunks(chunks)
+            
 
 
 if __name__ == "__main__": 
