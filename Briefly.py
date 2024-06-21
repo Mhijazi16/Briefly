@@ -15,6 +15,10 @@ class OllamaEmbeddingWrapper:
     def __call__(self, text):
         return ollama.embeddings(model=self.model_name, prompt=text)['embedding']
 
+def create_vectorstore(chunks): 
+    embedding_model = OllamaEmbeddingWrapper(model_name="nomic-embed-text")
+    return FAISS.from_texts(texts=chunks,embedding=embedding_model).as_retriever()
+
 def split_text(raw_text):
     splitter = RecursiveCharacterTextSplitter(
         separators=["\n\n", "\n", ".", " "],
