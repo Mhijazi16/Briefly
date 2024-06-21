@@ -6,6 +6,14 @@ from langchain.vectorstores import FAISS
 from langchain_community.llms import Ollama
 
 model = Ollama(model="llama3")
+class OllamaEmbeddingWrapper:
+    def __init__(self, model_name):
+        self.model_name = model_name
+
+    def embed_documents(self, texts):
+        return [ollama.embeddings(model=self.model_name, prompt=text)['embedding'] for text in texts]
+    def __call__(self, text):
+        return ollama.embeddings(model=self.model_name, prompt=text)['embedding']
 
 def split_text(raw_text):
     splitter = RecursiveCharacterTextSplitter(
