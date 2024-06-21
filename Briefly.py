@@ -15,7 +15,7 @@ class OllamaEmbeddingWrapper:
     def __call__(self, text):
         return ollama.embeddings(model=self.model_name, prompt=text)['embedding']
 
-def create_vectorstore(chunks): 
+def get_retriever(chunks): 
     embedding_model = OllamaEmbeddingWrapper(model_name="nomic-embed-text")
     return FAISS.from_texts(texts=chunks,embedding=embedding_model).as_retriever()
 
@@ -61,7 +61,7 @@ def main():
             with st.spinner("Processing") : 
                 raw_text  = read_docs(documents)
                 chunks = split_text(raw_text)
-                st.session_state.retriever = create_vectorstore(chunks)
+                st.session_state.retriever = get_retriever(chunks)
 
 if __name__ == "__main__": 
     main()
