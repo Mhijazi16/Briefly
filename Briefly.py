@@ -19,6 +19,13 @@ def create_vectorstore(chunks):
     embedding_model = OllamaEmbeddingWrapper(model_name="nomic-embed-text")
     return FAISS.from_texts(texts=chunks,embedding=embedding_model).as_retriever()
 
+def handle_questions(question): 
+    with st.spinner("Retrieving relevent information"): 
+        context = st.session_state.retriever.invoke(message)
+    with st.spinner("generating"): 
+        st.write_stream(
+            model.stream(f"Question: {message} \n\n Context: {context}"))
+
 def split_text(raw_text):
     splitter = RecursiveCharacterTextSplitter(
         separators=["\n\n", "\n", ".", " "],
