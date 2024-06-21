@@ -3,19 +3,9 @@ from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import ollama
 from langchain.vectorstores import FAISS
+from langchain_community.llms import Ollama
 
-def create_vectorstore(chunks,embeddings): 
-    return FAISS.from_texts(texts=chunks,embedding=embeddings)
-
-def embed_chunks(chunks): 
-    vectors = []
-    for i, chunk in enumerate(chunks, start=1): 
-        vector = ollama.embeddings(
-            model="nomic-embed-text",
-            prompt=chunk
-        )
-        vectors.append(vector)
-    return vectors
+model = Ollama(model="llama3")
 
 def split_text(raw_text):
     splitter = RecursiveCharacterTextSplitter(
@@ -35,9 +25,15 @@ def read_docs(documents):
     return text
 
 def main(): 
+    if "retriever" not in st.session_state: 
+        st.session_state.retriever = None
+
     st.set_page_config(page_icon=":scroll:",page_title="Briefly")
     st.header("Chat With Your Documents :scroll:")
-    input = st.text_input("Enter Question !")
+
+    question = st.text_input("Enter Question !")
+    if question: 
+        handle_questions(question)
 
     with st.sidebar: 
         st.subheader("Upload Your Documents")
@@ -46,9 +42,7 @@ def main():
             with st.spinner("Processing") : 
                 raw_text  = read_docs(documents)
                 chunks = split_text(raw_text)
-                vectors = embed_chunks(chunks)
-            
-
+                st.session_state.retriever = create_vectorstore(chunks)
 
 if __name__ == "__main__": 
     main()
