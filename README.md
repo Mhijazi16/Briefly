@@ -12,7 +12,6 @@ Briefly is an innovative application that allows you to chat with your documents
 - **Open-Source LLMs**: Powered by open-source language models.
 
 ## 🛠️ Installation
-
 To get started with Briefly, follow these steps:
 
 1. **Clone the repository**:
