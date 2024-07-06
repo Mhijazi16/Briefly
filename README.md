@@ -14,6 +14,7 @@ Briefly is an innovative application that allows you to chat with your documents
 ## 🛠️ Installation
 To get started with Briefly, follow these steps:
 
+`make sure Ollama and llama3 is installed`
 1. **Clone the repository**:
     ```sh
     git clone https://github.com/Mhijazi16/Briefly.git
