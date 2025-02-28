@@ -1,5 +1,7 @@
 # 📜 Briefly
 
+
+
 Briefly is an innovative application that allows you to chat with your documents using open-source Large Language Models (LLMs). Upload your PDFs, ask questions, and receive relevant answers in no time!
 
 ![Briefly-Brave2024-06-2312-46-19-ezgif com-video-to-gif-converter](https://github.com/Mhijazi16/Briefly/assets/45119497/12e3112b-dc66-4624-97c6-6f689e08981c)
